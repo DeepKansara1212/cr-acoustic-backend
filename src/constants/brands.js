@@ -1,0 +1,26 @@
+const BRANDS = [
+  'Ahuja',
+  'StudioMaster',
+  'DynaTech',
+  'Digimore',
+  'NX Audio',
+  'P.Audio',
+  'Sound Craft',
+  'Stranger',
+  'Dbx',
+  'Pioneer',
+  'Dasska',
+  'Yamaha',
+  'Real Audio',
+  'ITS',
+  'A Plus',
+  'Tauras',
+  'Musimax',
+  'AudioTone',
+  'Sousys',
+  'NV Mark',
+  'Dynamite',
+  'Nlabs',
+];
+
+module.exports = BRANDS;

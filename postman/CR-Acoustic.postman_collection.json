@@ -1,0 +1,470 @@
+{
+  "info": {
+    "name": "CR Acoustic API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "cr-acoustic-collection"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "serverUrl", "value": "http://localhost:5000" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{serverUrl}}/health",
+            "auth": { "type": "noauth" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data.accessToken) { pm.collectionVariables.set('accessToken', data.data.accessToken); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"TestPass123!\",\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/register"
+          }
+        },
+        {
+          "name": "Login (Test User)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data.accessToken) { pm.collectionVariables.set('accessToken', data.data.accessToken); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"TestPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data.accessToken) { pm.collectionVariables.set('accessToken', data.data.accessToken); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "auth": { "type": "noauth" },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@cracoustic.com\",\n  \"password\": \"AdminPass123!\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh-token"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": { "method": "POST", "url": "{{baseUrl}}/auth/logout" }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": { "method": "GET", "auth": { "type": "noauth" }, "url": "{{baseUrl}}/categories" }
+        },
+        {
+          "name": "Create Category (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data._id) { pm.collectionVariables.set('categoryId', data.data._id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Category\",\n  \"description\": \"Created from Postman\"\n}"
+            },
+            "url": "{{baseUrl}}/categories"
+          }
+        },
+        {
+          "name": "Update Category (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"description\": \"Updated description\"\n}" },
+            "url": "{{baseUrl}}/categories/{{categoryId}}"
+          }
+        },
+        {
+          "name": "Delete Category (admin)",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/categories/{{categoryId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "auth": { "type": "noauth" },
+            "url": {
+              "raw": "{{baseUrl}}/products?page=1&limit=20&sort=newest",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "sort", "value": "newest" },
+                { "key": "category", "value": "", "disabled": true },
+                { "key": "brand", "value": "", "disabled": true },
+                { "key": "minPrice", "value": "", "disabled": true },
+                { "key": "maxPrice", "value": "", "disabled": true },
+                { "key": "search", "value": "", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By Id",
+          "request": { "method": "GET", "auth": { "type": "noauth" }, "url": "{{baseUrl}}/products/{{productId}}" }
+        },
+        {
+          "name": "Get Product By Slug",
+          "request": {
+            "method": "GET",
+            "auth": { "type": "noauth" },
+            "url": "{{baseUrl}}/products/slug/{{productSlug}}"
+          }
+        },
+        {
+          "name": "Get Products By Category",
+          "request": {
+            "method": "GET",
+            "auth": { "type": "noauth" },
+            "url": "{{baseUrl}}/products/category/{{categoryId}}"
+          }
+        },
+        {
+          "name": "Get Related Products",
+          "request": {
+            "method": "GET",
+            "auth": { "type": "noauth" },
+            "url": "{{baseUrl}}/products/related/{{productId}}"
+          }
+        },
+        {
+          "name": "Create Product (admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data._id) { pm.collectionVariables.set('productId', data.data._id); pm.collectionVariables.set('productSlug', data.data.slug); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Test Speaker\",\n  \"fullDescription\": \"A speaker created via Postman for API testing.\",\n  \"shortDescription\": \"Test speaker\",\n  \"price\": 9999,\n  \"stock\": 25,\n  \"category\": \"{{categoryId}}\",\n  \"brand\": \"Ahuja\",\n  \"tags\": [\"test\"],\n  \"images\": [\n    { \"url\": \"https://placehold.co/600x600?text=Test+Speaker\", \"alt\": \"Test Speaker\", \"isDefault\": true }\n  ]\n}"
+            },
+            "url": "{{baseUrl}}/products"
+          }
+        },
+        {
+          "name": "Update Product (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"price\": 10999,\n  \"stock\": 30\n}" },
+            "url": "{{baseUrl}}/products/{{productId}}"
+          }
+        },
+        {
+          "name": "Delete Product (admin)",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/products/{{productId}}" }
+        },
+        {
+          "name": "Bulk Import Products CSV (admin)",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": [] }]
+            },
+            "url": "{{baseUrl}}/products/bulk-import"
+          }
+        },
+        {
+          "name": "Export Products CSV (admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/products/export" }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": { "method": "GET", "url": "{{baseUrl}}/cart" }
+        },
+        {
+          "name": "Add To Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 2\n}" },
+            "url": "{{baseUrl}}/cart/add"
+          }
+        },
+        {
+          "name": "Update Cart Item",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"quantity\": 3\n}" },
+            "url": "{{baseUrl}}/cart/update/{{productId}}"
+          }
+        },
+        {
+          "name": "Remove Cart Item",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/cart/remove/{{productId}}" }
+        },
+        {
+          "name": "Clear Cart",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/cart/clear" }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data._id) { pm.collectionVariables.set('orderId', data.data._id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shippingAddress\": {\n    \"street\": \"123 MG Road\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"postalCode\": \"560001\",\n    \"country\": \"India\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/orders"
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": { "method": "GET", "url": "{{baseUrl}}/orders" }
+        },
+        {
+          "name": "Get Order By Id",
+          "request": { "method": "GET", "url": "{{baseUrl}}/orders/{{orderId}}" }
+        },
+        {
+          "name": "Update Order Status (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderStatus\": \"confirmed\"\n}" },
+            "url": "{{baseUrl}}/orders/{{orderId}}/status"
+          }
+        },
+        {
+          "name": "Get All Orders (admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/orders/admin/all" }
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "item": [
+        {
+          "name": "Create Razorpay Order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{orderId}}\"\n}" },
+            "url": "{{baseUrl}}/payment/razorpay-order"
+          }
+        },
+        {
+          "name": "Verify Payment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"\",\n  \"razorpay_payment_id\": \"\",\n  \"razorpay_signature\": \"\",\n  \"orderId\": \"{{orderId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/payment/verify-payment"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get Product Reviews",
+          "request": { "method": "GET", "auth": { "type": "noauth" }, "url": "{{baseUrl}}/reviews/{{productId}}" }
+        },
+        {
+          "name": "Add Review",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.data && data.data._id) { pm.collectionVariables.set('reviewId', data.data._id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"reviewTitle\": \"Great sound quality\",\n  \"reviewText\": \"Very happy with this purchase.\"\n}"
+            },
+            "url": "{{baseUrl}}/reviews/{{productId}}"
+          }
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"rating\": 4,\n  \"reviewText\": \"Updated review text.\"\n}" },
+            "url": "{{baseUrl}}/reviews/{{reviewId}}"
+          }
+        },
+        {
+          "name": "Delete Review",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/reviews/{{reviewId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Wishlist",
+      "item": [
+        {
+          "name": "Get Wishlist",
+          "request": { "method": "GET", "url": "{{baseUrl}}/wishlist" }
+        },
+        {
+          "name": "Add To Wishlist",
+          "request": { "method": "POST", "url": "{{baseUrl}}/wishlist/add/{{productId}}" }
+        },
+        {
+          "name": "Remove From Wishlist",
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/wishlist/remove/{{productId}}" }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Images (admin)",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "images", "type": "file", "src": [] }]
+            },
+            "url": "{{baseUrl}}/upload"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Dashboard Stats (admin)",
+          "request": { "method": "GET", "url": "{{baseUrl}}/admin/dashboard/stats" }
+        }
+      ]
+    }
+  ]
+}

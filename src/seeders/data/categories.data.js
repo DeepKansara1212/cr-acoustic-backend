@@ -1,0 +1,15 @@
+module.exports = [
+  { name: 'Amplifier', description: 'Power amplifiers for professional and home audio setups' },
+  { name: 'Microphone', description: 'Wired and wireless microphones for stage, studio, and conferencing' },
+  { name: 'Speaker', description: 'Passive and active speakers for indoor and outdoor use' },
+  { name: 'Mixer', description: 'Audio mixing consoles for live sound and studio production' },
+  { name: 'Horn', description: 'Horn speakers for high-output announcement and PA systems' },
+  { name: 'Crossover', description: 'Frequency dividing networks for multi-driver speaker systems' },
+  { name: 'Megaphone', description: 'Portable megaphones for public announcements' },
+  { name: 'Unit Drivers', description: 'Replacement driver units for speakers and horns' },
+  { name: 'Driver', description: 'Compression and cone drivers for speaker systems' },
+  { name: 'Conference System', description: 'Conference microphone and speaker systems for meeting rooms' },
+  { name: 'Audio Splitter', description: 'Signal splitters and distribution units' },
+  { name: 'Line Array Loudspeaker', description: 'Line array systems for large venue sound reinforcement' },
+  { name: 'Stands', description: 'Microphone, speaker, and instrument stands' },
+];
